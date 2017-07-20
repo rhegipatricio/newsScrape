@@ -11,7 +11,7 @@ mongoose.Promise = Promise;
 
 var app = express();
 
-app.use(logger("dev"));
+
 app.use(bodyParser.urlencoded({
 	extended: false
 }));
@@ -20,13 +20,13 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 // Database config with mongoose
-mongoose.connect("mongodb:")
+mongoose.connect("mongodb://localhost/week18day3mongoose")
 var db = mongoose.connection; 
 
 // Mongoose errors
 db.on("error", function(error) {
 	console.log("Mongoose Error: ", error);
-	)};
+	});
 
 // Once logged into the db through mongoose, success message shown 
 db.once("open", function() {
@@ -36,7 +36,7 @@ db.once("open", function() {
 // Routes
 
 app.get("/scrape", function(req, res) {
-	request("http://", function (error, response, html) {
+	request("http://www.mercurynews.com/", function (error, response, html) {
 		var $ = cheerio.load(html);
 
 		$("").each(function(i, element){
