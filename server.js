@@ -30,5 +30,30 @@ db.on("error", function(error) {
 
 // Once logged into the db through mongoose, success message shown 
 db.once("open", function() {
-	console.log("Mongoose connectino successful.");
+	console.log("Mongoose connection successful.");
 });
+
+// Routes
+
+app.get("/scrape", function(req, res) {
+	request("http://", function (error, response, html) {
+		var $ = cheerio.load(html);
+
+		$("").each(function(i, element){
+
+			var result = {};
+
+			result.title = $(this).children("a").text();
+			result.link = $(this).children("a").attr("href");
+
+			var entry = new Artile(result);
+
+			entry.save(function(err, doc) {
+				// errors logged
+				if (err) {
+					console.log(err);
+				}
+			})
+		})
+	})
+})
