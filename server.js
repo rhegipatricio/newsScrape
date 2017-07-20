@@ -53,7 +53,72 @@ app.get("/scrape", function(req, res) {
 				if (err) {
 					console.log(err);
 				}
-			})
-		})
-	})
-})
+
+				else {
+					console.log(doc);
+				}
+			});
+		});
+	});
+	// Tells browser that the text has been scraped
+	res.send("Scrape Complete");
+});
+
+app.get("/articles", function(req, res) {
+	// Grabs documents in Article array
+	Article.find({})
+		.populate("note")
+		.exec(function(error, doc) {
+
+		if (error) {
+			console.log(error);
+		}	
+		else {
+			res.json(doc);
+		}
+	});
+});
+
+app.get("/articles/:id", function(req, res) {
+
+	Article.findOne({ "_id": req.params.id })
+
+	.populate("note")
+
+	.exec(function(error, doc) {
+		// error logging
+		if (error) {
+			console.log(error);
+		}
+		else {
+			res.json(doc);
+		}
+	});
+});
+
+app.post("/articles/:id", function(req, res) {
+
+	var newNote = new Note(req.body);
+
+	newNote.save(function(error, doc) {
+
+		if (error) {
+			console.log(error);
+		}
+		else {
+
+			Article.findOneAndUpdate({ "_id": req.params.id }, { "note": doc._id })
+
+			.exec(function(err, doc) {
+
+				if (err) {
+					console.log(err);
+				}
+				else {
+
+					res.send(doc);
+				}
+			});
+		}
+	});
+});
