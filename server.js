@@ -36,28 +36,32 @@ db.once("open", function() {
 // Routes
 
 app.get("/scrape", function(req, res) {
+
+	console.log("scrape")
 	request("http://www.mercurynews.com/", function (error, response, html) {
 		var $ = cheerio.load(html);
 
-		$("").each(function(i, element){
+		console.log("request")
+
+		$("div.article-info").each(function(i, element){
 
 			var result = {};
 
-			result.title = $(this).children("a").text();
+			result.title = $(this).children().children().children("a.article-title").attr("href")
 			result.link = $(this).children("a").attr("href");
+console.log(result.title)
+			// var entry = new Artile(result);
 
-			var entry = new Artile(result);
+			// entry.save(function(err, doc) {
+			// 	// errors logged
+			// 	if (err) {
+			// 		console.log(err);
+			// 	}
 
-			entry.save(function(err, doc) {
-				// errors logged
-				if (err) {
-					console.log(err);
-				}
-
-				else {
-					console.log(doc);
-				}
-			});
+			// 	else {
+			// 		console.log(doc);
+				// }
+			// });
 		});
 	});
 	// Tells browser that the text has been scraped
