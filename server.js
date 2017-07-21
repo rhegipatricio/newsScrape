@@ -24,7 +24,7 @@ mongoose.connect("mongodb://localhost/week18day3mongoose")
 var db = mongoose.connection; 
 
 // Mongoose errors
-db.on("error", function(error) {
+ddb.on("error", function(error) {
 	console.log("Mongoose Error: ", error);
 	});
 
@@ -34,6 +34,11 @@ db.once("open", function() {
 });
 
 // Routes
+
+app.get("/", function(req, res) {
+
+	res.render("/index")
+})
 
 app.get("/scrape", function(req, res) {
 
@@ -120,7 +125,7 @@ app.post("/articles/:id", function(req, res) {
 				}
 				else {
 
-					res.send(doc);
+					res.send(doc);d
 				}
 			});
 		}
